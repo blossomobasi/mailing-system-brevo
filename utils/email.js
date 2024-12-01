@@ -1,25 +1,23 @@
 const nodemailer = require("nodemailer");
 const pug = require("pug");
 const { convert } = require("html-to-text");
-const { MailSlurp } = require("mailslurp-client");
 
 module.exports = class Email {
 	constructor(user, url) {
 		this.to = user.email;
 		this.firstName = user.firstName;
 		this.url = url;
-		this.from = `Blogssom <${process.env.EMAIL_FROM}>`;
-		this.mailslurp = new MailSlurp({ apiKey: process.env.MAILSLURP_API_KEY });
+		this.from = `COMPANY_NAME <${process.env.EMAIL_FROM}>`;
 	}
 
 	// 1) Create a transporter
 	newTransport() {
 		if (process.env.NODE_ENV === "production") {
-			// Mailslurp
+			// BREVO
 			return nodemailer.createTransport({
 				host: process.env.BREVO_HOST,
 				port: process.env.BREVO_PORT,
-				secure: true,
+				secure: false,
 				auth: {
 					user: process.env.BREVO_USERNAME,
 					pass: process.env.BREVO_PASSWORD,
@@ -59,7 +57,7 @@ module.exports = class Email {
 	}
 
 	async sendWelcome() {
-		await this.send("Welcome", "Welcome to Blogssom!");
+		await this.send("Welcome", "Welcome to my Mailing System!");
 	}
 
 	async sendPasswordReset() {
